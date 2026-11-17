@@ -75,3 +75,19 @@ if backward_chaining(goal, facts, rules):
     print("Goal", goal, "is proved.")
 else:
     print("Goal", goal, "cannot be proved.")
+
+
+1. Expert system: A program that imitates a human expert's decision-making in a specific domain.
+Components: knowledge base, inference engine, user interface, working memory (facts), and an
+explanation facility (plus a knowledge acquisition module).
+2. Fact vs rule: A fact is a known true statement (fever). A rule is an IF-THEN relation (IF fever AND cough
+THEN flu).
+3. Propositional logic: Statements that are either true or false, combined with AND, OR, NOT, and
+IMPLIES. It is used to represent rules and facts in the knowledge base.
+4. Forward vs backward chaining: Forward is data-driven: it starts from facts and applies rules to
+derive new facts until the goal appears. Backward is goal-driven: it starts from the goal and checks
+whether the premises can be proved.
+5. Role of knowledge base: It stores domain facts and rules, and the inference engine uses it to reach
+conclusions.
+6. How backward chaining proves a goal: It looks for rules that conclude the goal, then recursively
+tries to prove each premise, until all reduce to known facts.
