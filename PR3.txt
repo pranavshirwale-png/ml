@@ -128,3 +128,15 @@ print(f"{'Execution time (us)':<22} "
 print(f"{'Optimal path?':<22} "
       f"{'Yes' if path_cost(g_path) == path_cost(a_path) else 'No':<14} "
       f"{'Yes':<14}")
+
+
+
+1. Heuristic function h(n): Estimates the cost from node n to the goal. It guides the search toward
+promising nodes.
+2. Evaluation functions: A* uses f(n) = g(n) + h(n). Greedy uses f(n) = h(n).
+3. A* vs Greedy: A* is optimal (if h is admissible) and complete. Greedy is faster but neither optimal nor
+guaranteed complete.
+4. Path cost vs heuristic cost: g(n) is the actual cost from the start to n. h(n) is the estimated cost from
+n to the goal.
+5. Optimal vs complete: Complete means it always finds a solution if one exists. Optimal means the
+solution it finds is the cheapest.
