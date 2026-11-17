@@ -1,0 +1,76 @@
+
+# Simple Smart Home Intelligent Agent
+
+PEAS = {
+    "Performance Measure": "Comfortable temperature, energy saving, user convenience",
+    "Environment": "Rooms, residents, weather and room conditions",
+    "Actuators": "Fan, Air Conditioner, Lights",
+    "Sensors": "Temperature, Light and Motion sensors"
+}
+
+class SmartHomeAgent:
+
+    def __init__(self):
+        self.memory = []
+
+    def perceive(self, temperature, light, motion):
+        percept = {
+            "temperature": temperature,
+            "light": light,
+            "motion": motion
+        }
+        self.memory.append(percept)
+        return percept
+
+    def act(self, percept):
+        actions = {}
+
+        if percept["temperature"] > 35:
+            actions["AC"], actions["Fan"] = "ON", "ON"
+        elif percept["temperature"] > 30:
+            actions["AC"], actions["Fan"] = "OFF", "ON"
+        else:
+            actions["AC"], actions["Fan"] = "OFF", "OFF"
+
+        if percept["light"] == "dark" and percept["motion"] == "yes":
+            actions["Light"] = "ON"
+        else:
+            actions["Light"] = "OFF"
+
+        return actions
+
+
+print("=" * 60)
+print("PEAS DESCRIPTION OF SMART HOME AGENT")
+print("=" * 60)
+
+for key, value in PEAS.items():
+    print(f"{key:20}: {value}")
+
+agent = SmartHomeAgent()
+
+print("\n--- Reading sensors ---")
+
+temperature = int(input("Enter room temperature: "))
+light = input("Enter light condition (bright/dark): ").lower()
+motion = input("Is anyone in the room? (yes/no): ").lower()
+
+percept = agent.perceive(temperature, light, motion)
+
+print("\nSensors :", percept)
+print("Actuators:", agent.act(percept))
+
+print("\n--- Simulation: one day in the smart home ---")
+
+scenarios = [
+    ("Morning", 24, "bright", "yes"),
+    ("Afternoon", 38, "bright", "yes"),
+    ("Evening", 31, "dark", "yes"),
+    ("Night", 22, "dark", "no")
+]
+
+for time_of_day, t, l, m in scenarios:
+    p = agent.perceive(t, l, m)
+    print(f"{time_of_day:10} {p} -> {agent.act(p)}")
+
+print("\nTotal percepts stored in memory:", len(agent.memory))

@@ -1,0 +1,77 @@
+
+# Forward and Backward Chaining
+
+fever = input("Do you have fever? (yes/no): ").lower()
+cough = input("Do you have cough? (yes/no): ").lower()
+
+# Initial facts
+facts = set()
+
+if fever == "yes":
+    facts.add("fever")
+
+if cough == "yes":
+    facts.add("cough")
+
+# Rules
+rules = [
+    (["fever", "cough"], "flu"),
+    (["flu"], "take_rest"),
+    (["fever"], "drink_water")
+]
+
+
+# Forward Chaining
+def forward_chaining(facts, rules):
+    facts = set(facts)
+    changed = True
+
+    while changed:
+        changed = False
+
+        for conditions, result in rules:
+            if result not in facts and all(c in facts for c in conditions):
+                facts.add(result)
+
+                print("Rule fired:",
+                      " AND ".join(conditions), "->", result)
+
+                changed = True
+
+    return facts
+
+
+# Backward Chaining
+def backward_chaining(goal, facts, rules, depth=0):
+    indent = " " * depth
+
+    if goal in facts:
+        print(indent, goal, "is a known fact")
+        return True
+
+    for conditions, result in rules:
+        if result == goal:
+            print(indent, "To prove", goal,
+                  "we need:", conditions)
+
+            if all(backward_chaining(c, facts, rules, depth + 1)
+                   for c in conditions):
+                return True
+
+    return False
+
+
+# Display results
+print("\nInitial Facts:", facts)
+
+print("\n--- Forward Chaining ---")
+final_facts = forward_chaining(facts, rules)
+print("Final Facts:", final_facts)
+
+print("\n--- Backward Chaining ---")
+goal = input("Enter goal (flu/take_rest/drink_water): ")
+
+if backward_chaining(goal, facts, rules):
+    print("Goal", goal, "is proved.")
+else:
+    print("Goal", goal, "cannot be proved.")

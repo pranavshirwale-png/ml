@@ -1,0 +1,130 @@
+
+import heapq
+import time
+
+# Graph with edge costs
+graph = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'D': 2, 'E': 5},
+    'C': {'E': 1},
+    'D': {'F': 3},
+    'E': {'F': 2},
+    'F': {}
+}
+
+# Heuristic values
+h = {'A': 6, 'B': 5, 'C': 3, 'D': 3, 'E': 2, 'F': 0}
+
+
+# Calculate path cost
+def path_cost(path):
+    return sum(graph[path[i]][path[i + 1]]
+               for i in range(len(path) - 1))
+
+
+# Greedy Best First Search
+def greedy(start, goal):
+    open_list = [(h[start], start, [start])]
+    closed = []
+
+    while open_list:
+        _, node, path = heapq.heappop(open_list)
+
+        if node in closed:
+            continue
+
+        closed.append(node)
+
+        if node == goal:
+            return path, closed
+
+        for neighbour in graph[node]:
+            if neighbour not in closed:
+                heapq.heappush(
+                    open_list,
+                    (h[neighbour], neighbour, path + [neighbour])
+                )
+
+    return None, closed
+
+
+# A* Search
+def astar(start, goal):
+    open_list = [(h[start], 0, start, [start])]
+    closed = []
+    best_g = {start: 0}
+
+    while open_list:
+        f, g, node, path = heapq.heappop(open_list)
+
+        if node in closed:
+            continue
+
+        closed.append(node)
+
+        if node == goal:
+            return path, closed
+
+        for neighbour, cost in graph[node].items():
+            new_g = g + cost
+
+            if neighbour not in best_g or new_g < best_g[neighbour]:
+                best_g[neighbour] = new_g
+
+                heapq.heappush(
+                    open_list,
+                    (new_g + h[neighbour], new_g,
+                     neighbour, path + [neighbour])
+                )
+
+    return None, closed
+
+
+# Measure execution time
+def measure_time(func, start, goal, runs=10000):
+    t1 = time.perf_counter()
+
+    for _ in range(runs):
+        func(start, goal)
+
+    return (time.perf_counter() - t1) / runs * 1e6
+
+
+# Starting and goal nodes
+start, goal = 'A', 'F'
+
+g_path, g_visited = greedy(start, goal)
+a_path, a_visited = astar(start, goal)
+
+
+# Greedy Search Result
+print("----- Greedy Best First Search -----")
+print("Path:", g_path)
+print("Path cost:", path_cost(g_path))
+print("Nodes explored:", g_visited)
+print("Number of nodes explored:", len(g_visited))
+
+
+# A* Search Result
+print("\n----- A* Search -----")
+print("Path:", a_path)
+print("Path cost:", path_cost(a_path))
+print("Nodes explored:", a_visited)
+print("Number of nodes explored:", len(a_visited))
+
+
+# Performance Comparison
+print("\n----- Comparison -----")
+print(f"{'Parameter':<22} {'Greedy':<14} {'A*':<14}")
+
+print(f"{'Path cost':<22} {path_cost(g_path):<14} {path_cost(a_path):<14}")
+
+print(f"{'Nodes explored':<22} {len(g_visited):<14} {len(a_visited):<14}")
+
+print(f"{'Execution time (us)':<22} "
+      f"{measure_time(greedy, start, goal):<14.2f} "
+      f"{measure_time(astar, start, goal):<14.2f}")
+
+print(f"{'Optimal path?':<22} "
+      f"{'Yes' if path_cost(g_path) == path_cost(a_path) else 'No':<14} "
+      f"{'Yes':<14}")
