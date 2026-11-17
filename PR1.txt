@@ -74,3 +74,16 @@ for time_of_day, t, l, m in scenarios:
     print(f"{time_of_day:10} {p} -> {agent.act(p)}")
 
 print("\nTotal percepts stored in memory:", len(agent.memory))
+
+
+1. Intelligent agent: An entity that perceives its environment through sensors and acts on it through
+actuators to achieve its goals.
+2. Types of agents: Simple reflex, model-based reflex, goal-based, utility-based, learning agent.
+3. Environment types: Fully/partially observable, deterministic/stochastic, episodic/sequential,
+static/dynamic, discrete/continuous, single/multi-agent.
+4. Why PEAS is important: It defines the task environment clearly (what to optimize, where the agent
+works, what it senses and does) before design starts.
+5. Sensors and actuators: Sensors give percepts, the agent function maps percepts to actions, and
+actuators carry the actions out.
+6. Model-based reflex vs goal-based: Model-based keeps internal state and uses condition-action rules.
+Goal-based also considers future states and picks actions that reach a goal.
