@@ -81,4 +81,14 @@ if start in graph and goal in graph:
         print("DFS Path Length:", len(dfs_path) - 1)
 else:
     print("Invalid starting or goal node!")
-5
+
+
+1. Data structures: BFS uses a queue (FIFO), DFS uses a stack (LIFO) or recursion. Both use a visited
+set.
+2. Complexity: BFS time O(b^d), space O(b^d). DFS time O(b^m), space O(b·m), where d = goal depth
+and m = max depth.
+3. BFS vs DFS: BFS is complete and gives the shortest path (unweighted), but uses more memory. DFS
+uses less memory but may give a longer path and is not optimal.
+4. Limited memory: Choose DFS, because it only stores the current path.
+5. Performance comparison: BFS gives the shortest path length but usually explores more nodes. DFS
+may explore fewer or more nodes and gives a path that is not necessarily shortest.
